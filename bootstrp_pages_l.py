@@ -9,11 +9,6 @@ def get_html(url):
         return r.text
     print(r.status_code)#print if url code(!200) is bad.
 
-def refine_price(s):
-    #<span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">$</span>59.00</span>
-   print(f"function called: {s}")
-   return s
-
 def get_page_data(html):
     soup= BeautifulSoup(html, 'lxml')
 
@@ -22,18 +17,14 @@ def get_page_data(html):
     for li in lis:
         try:
             name = li.find('div',class_='theme-card__footer').find('a', class_='theme-card__title').text
-            #print(name)
         except:
-            name = '#'
-            #print(name)
+            name = ''
         try:
             url = li.find('div', class_='theme-card__footer').find('a').get('href')
-            #print(url)
         except:
             url = ''
         try:
             category = li.find('div', class_='theme-card__footer').find('ul').find('a').text
-            #print(category)
         except:
             category = ''
         try:
@@ -53,6 +44,7 @@ def write_csv(data):
 
 def main():
     pattern = 'https://themes.getbootstrap.com/shop/page/{}' #/{}.php
+    #adding pagination (method 1)
     for i in range(0,7):
         url = pattern.format(str(i))
         #print(url)
