@@ -11,9 +11,7 @@ def get_html(url):
 def write_csv(data):
     with open('datasheet.csv', 'a') as f:
         writer = csv.writer(f)
-        writer.writerow([data['name'],data['url'],data['price']])
-        pass
-
+        writer.writerow((data['name'],data['url'],data['price']))
 
 def get_page_data(html):
     soup = BeautifulSoup(html, 'lxml')
@@ -39,7 +37,7 @@ def get_page_data(html):
 
 #in/out
 def main():
-    url = 'https://coinmarketcap.com'
+    url = 'https://coinmarketcap.com/'
 
     #method ll: dealong with pagination
     ##scenario 2: unkown amunt of pages
@@ -49,7 +47,6 @@ def main():
 
         try: #we'll use RE to beat this thing.
             pattern = 'Next'
-            print(f"test URL: {url}")
             url = 'https://coinmarketcap.com' + soup.find('ul', class_='pagination').find('a', text=re.compile(pattern)).get('href')#using RE if 'a' doesn't contain text 'Next' then we don't get 'href'
         except:
             #in case we diodn't find 'Next' we break from the cycle
