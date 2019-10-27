@@ -1,16 +1,21 @@
 import csv
 
-#def write_csv(data):
-#    with open('names.csv','a') as file:
+def write_csv(data):
+    with open('names.csv','a') as file:
         #https://docs.python.org/3/library/csv.html#csv.writer
-#        writer = csv.writer(file)
-#        writer.writerow((data['name'], data['surname'], data ['age']))
+        writer = csv.writer(file)
+        #Method 1
+        writer.writerow((data['name'], data['surname'], data ['age']))
 
-#write while dictionry
-#def writte_csv2(data):
-#    with open('names.csv', 'a') as file:
-#        order = ['name','surname','age']
-#        writer.csv.DictWriter(file, fieldnames=order)
+
+
+def write_csv2(data):
+    with open('names.csv', 'a') as file:
+        order = ['name','surname','age']
+        #Method 2
+        #DickWriter is not in order, so we use parameter
+        writer.csv.DictWriter(file, fieldnames=order)
+        writer.writerow(data)
 def main():
     #dictionaries
     d = {'name':'Oleg', 'surname':'Fortochnik', 'age':30}
@@ -19,9 +24,9 @@ def main():
 
     l = [d, d1, d2]
 
-#    for i in l:
-#        write_csv(i)
-
+    for i in l:
+        write_csv(i)
+    #Reading from file
     with open('datasheet.csv') as file:
         fieldnames = ['name','url','price']
         reader = csv.DictReader(file, fieldnames=fieldnames)
