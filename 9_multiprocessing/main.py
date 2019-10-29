@@ -9,7 +9,7 @@ def get_html(url):
 def write_csv(data):
     with open('websites.csv', 'a')as file:
         order = ['name','url','description','traffic','percent']
-        writer = csv.DictWriter(file, filednames=order)
+        writer = csv.DictWriter(file, fieldnames=order)
         writer.writerow(data)
 
 def get_page_data(text):
@@ -40,8 +40,9 @@ def main():
     url = 'https://www.liveinternet.ru/rating/ru//today.tsv?page={}'
     # make sure page 0 and 1 are not the same one!
     urls=[url.format(str(i)) for i in range(1,4772)]#last page 4771
-    print(urls)
+    #print(urls)
 
+    #50 workers
     with Pool(50) as p:
         p.map(make_all,urls)
 
