@@ -9,7 +9,7 @@ def get_html(url):
     print(r.status_code)
 
 def write_csv(data):
-    with open('datasheet.csv', 'a') as f:
+    with open('cmc.csv', 'a') as f:
         writer = csv.writer(f)
         writer.writerow((data['name'],data['url'],data['price']))
 
