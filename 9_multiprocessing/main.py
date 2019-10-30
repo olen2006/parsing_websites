@@ -33,8 +33,8 @@ def get_page_data(text):
         write_csv(data)
 
 def make_all(url):
-    text = get_html(url)#assign text var
-    get_page_data(text) # pass text
+    text = get_html(url)
+    get_page_data(text)
 
 def main():
     url = 'https://www.liveinternet.ru/rating/ru//today.tsv?page={}'
