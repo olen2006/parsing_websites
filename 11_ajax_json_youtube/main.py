@@ -11,8 +11,8 @@ def get_html(url):
 
 def write_csv(data):
     with open('youtube_list.csv', 'a') as f:
-        order = []
-        writer = csv.DictWrite(f,fieldnames=order)
+        order = ['name','url']
+        writer = csv.DictWriter(f,fieldnames=order)
         writer.writerow(data)
 
 
@@ -28,26 +28,41 @@ def get_page_data(response):
     for item in items:
         name = item.text.strip()
         url = item.find('a').get('href')
-        print(name)
+
+        data = {'name':name, 'url':url}
+        write_csv(data)
+
 def get_next(response):
-    if 'html' in response.header['Content-Type']:
-        html = reponse.text
+    #check type of response html or json
+    if 'html' in response.headers['Content-Type']:
+        html = response.text
     else:
-        html = response.json()['load_more_widjet_html']
+        #button that loads more pages
+        html = response.json()['load_more_widget_html']
     soup = BeautifulSoup(html,'lxml')
     try:
-        url = soup.find('button')
-
-
+        url ='https://youtube.com' + soup.find('button', class_='load-more-button').get('data-uix-load-more-href')#we received browse_ajax link
+    except:
+        url = ''
+    return url
 
 def main():
-    url = 'https://www.youtube.com/channel/UCrp_UI8XtuYfpiqluWLD7Lw/videos' #'https://www.youtube.com/user/zaemiel/videos'#Molchanov channel
+    #rl = 'https://youtube.com/browse_ajax?action_continuation=1&continuation=4qmFsgI0EhhVQ09tNF9BbkxQTEVCVnJiby0tTjdrUEEaGEVnWjJhV1JsYjNNZ0FEZ0JlZ0V5dUFFQQ%253D%253D&direct_render=1'
+    url = 'https://www.youtube.com/user/coolpropaganda/videos'
     #get_page_data(get_html(url))
     while True:
+        #get data from one page
         response = get_html(url)
-        get_response_data(response)
+        #parse data from this page
+        get_page_data(response)
+        #call function to load second page(url will be changed)
         url = get_next(response)
+        if url:
+            continue
+        else:
+            break
 
 
-if __name__ =='__main__':
+if __name__ == '__main__':
     main()
+
