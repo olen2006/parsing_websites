@@ -11,26 +11,27 @@ def get_proxy():
     proxies = []
     for tr in trs:
         tds = tr.find_all('td')
-        ip = tds[0].text.strip()
-        port = tds[1].text.strip()
-        schema = 'https' if 'yes' in tds[6].text.strip() else 'http'
-        proxy = {'schema':schema,'address':ip + ':' + port}
-        #print(proxy)
-        proxies.append(proxy)
+        if tds[6].text.strip() == 'no':
+            ip = tds[0].text.strip()
+            port = tds[1].text.strip()
+            schema = 'http'
+            proxy = {'schema':schema,'address':ip + ':' + port}
+            proxies.append(proxy)
+        else:
+            continue
     return choice(proxies)
 
 def get_html(url):
     #proxies = {'http/https':'ipaddress:port'}
     p = get_proxy()#returns {'schema':'','address':''}
     proxy = {p['schema']:p['address']}
-    print(proxy)
     r =requests.get(url,proxies=proxy,timeout=5)
     #return r.json()['origin']
     return r.json()['ip']
 
 
 def main():
-    #url = 'http://httpbin.org/ip'
+   #url = 'http://httpbin.org/ip'
     url ='https://ip4.seeip.org/json'
     print(get_html(url))
 
